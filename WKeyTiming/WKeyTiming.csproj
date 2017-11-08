@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="GlobalKeyboard.cs" />
     <Compile Include="InterceptKeys.cs" />
+    <Compile Include="KeyTiming.cs" />
     <Compile Include="KeyTimingForm.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -40,7 +40,7 @@
             this.Status_textBox.Multiline = true;
             this.Status_textBox.Name = "Status_textBox";
             this.Status_textBox.ReadOnly = true;
-            this.Status_textBox.Size = new System.Drawing.Size(630, 228);
+            this.Status_textBox.Size = new System.Drawing.Size(388, 209);
             this.Status_textBox.TabIndex = 0;
             this.Status_textBox.WordWrap = false;
             // 
@@ -48,7 +48,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(630, 228);
+            this.ClientSize = new System.Drawing.Size(388, 209);
             this.Controls.Add(this.Status_textBox);
             this.Name = "KeyTimingForm";
             this.Text = "Form1";

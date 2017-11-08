@@ -14,17 +14,13 @@ namespace WKeyTiming
 {
     public partial class KeyTimingForm : Form
     {
-
         Stopwatch _stop_watch = new Stopwatch();
-
         private GlobalKeyboardHook _globalKeyboardHook;
 
-        int _last_key_press = -1;
-        TimeSpan _last_timespan = new TimeSpan(0);
+        Queue<KeyTiming> _key_queue = new Queue<KeyTiming>();
 
+        Task _dequeue_task;
         delegate void setTextCallback(string txt);
-
-        KeysConverter _key_converter = new KeysConverter();
 
         public KeyTimingForm()
         {
@@ -34,8 +30,10 @@ namespace WKeyTiming
         private void KeyTimingForm_Load(object sender, EventArgs e)
         {
             SetupKeyboardHooks();
-
             _stop_watch.Start();
+
+            _dequeue_task = new Task(() => dequeue());
+            _dequeue_task.Start();
         }
 
         public void SetupKeyboardHooks()
@@ -49,36 +47,41 @@ namespace WKeyTiming
             if (e.KeyboardState == GlobalKeyboardHook.KeyboardState.KeyDown)
             {
                 //e.Handled = true;
-                string msg;
-                if (e.KeyboardData.VirtualCode != _last_key_press)
-                {
-                    _last_key_press = e.KeyboardData.VirtualCode;
-
-                    msg = string.Format("Key {0}\r\n", _key_converter.ConvertToString(e.KeyboardData.VirtualCode));
-                    setOutputStatusText(msg);
-                }
-
-                msg = string.Format("Time {0}\r\n", _stop_watch.Elapsed.TotalMilliseconds);
-                setOutputStatusText(msg);
+                _key_queue.Enqueue(
+                    new KeyTiming(e.KeyboardData.VirtualCode, _stop_watch.Elapsed));
 
                 _stop_watch.Restart();
 
             }
+        }
 
-            void setOutputStatusText(string text)
+        void dequeue()
+        {
+            while (true)
             {
-                if (Status_textBox.InvokeRequired)
+                while (_key_queue.Count > 0)
                 {
-                    setTextCallback d = new setTextCallback(setOutputStatusText);
-                    this.Invoke(d, new object[] { text });
-                }
-                else
-                {
-                    Status_textBox.AppendText(text);
-                    Status_textBox.Update();
+                    KeyTiming kt = _key_queue.Dequeue();
+                    string msg = string.Format("{0},{1}\r\n", kt.toString(), kt.TimeSpan.TotalMilliseconds);
+                    setOutputStatusText(msg);
                 }
             }
         }
 
+        void setOutputStatusText(string text)
+        {
+            if (Status_textBox.InvokeRequired)
+            {
+                setTextCallback d = new setTextCallback(setOutputStatusText);
+                this.Invoke(d, new object[] { text });
+            }
+            else
+            {
+                Status_textBox.AppendText(text);
+                Status_textBox.Update();
+            }
+        }
     }
+
 }
+
