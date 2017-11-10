@@ -36,6 +36,7 @@
             // Status_textBox
             // 
             this.Status_textBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Status_textBox.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Status_textBox.Location = new System.Drawing.Point(0, 0);
             this.Status_textBox.Multiline = true;
             this.Status_textBox.Name = "Status_textBox";
@@ -51,7 +52,7 @@
             this.ClientSize = new System.Drawing.Size(388, 209);
             this.Controls.Add(this.Status_textBox);
             this.Name = "KeyTimingForm";
-            this.Text = "Form1";
+            this.Text = "KeyTiming by Victor Martin";
             this.Load += new System.EventHandler(this.KeyTimingForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

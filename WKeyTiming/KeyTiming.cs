@@ -10,14 +10,16 @@ namespace WKeyTiming
 {
     public class KeyTiming
     {
-        public KeyTiming(int virtualcode, TimeSpan ts)
+        public KeyTiming(int virtualcode, TimeSpan ts, GlobalKeyboardHook.KeyboardState keystate)
         {
             VirtualCode = virtualcode;
             TimeSpan = ts;
+            Keystate = keystate;
         }
 
         public int VirtualCode { get; set; }
         public TimeSpan TimeSpan { get; set; }
+        public GlobalKeyboardHook.KeyboardState Keystate { get; set; }
 
         public string toString()
         {

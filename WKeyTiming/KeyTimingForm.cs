@@ -44,14 +44,14 @@ namespace WKeyTiming
 
         private void OnKeyPressed(object sender, GlobalKeyboardHookEventArgs e)
         {
-            if (e.KeyboardState == GlobalKeyboardHook.KeyboardState.KeyDown)
+            if (//e.KeyboardState == GlobalKeyboardHook.KeyboardState.KeyDown ||
+                e.KeyboardState == GlobalKeyboardHook.KeyboardState.KeyUp)
             {
                 //e.Handled = true;
                 _key_queue.Enqueue(
-                    new KeyTiming(e.KeyboardData.VirtualCode, _stop_watch.Elapsed));
+                    new KeyTiming(e.KeyboardData.VirtualCode, _stop_watch.Elapsed, e.KeyboardState));
 
                 _stop_watch.Restart();
-
             }
         }
 
@@ -62,7 +62,12 @@ namespace WKeyTiming
                 while (_key_queue.Count > 0)
                 {
                     KeyTiming kt = _key_queue.Dequeue();
-                    string msg = string.Format("{0},{1}\r\n", kt.toString(), kt.TimeSpan.TotalMilliseconds);
+
+                    // Calulate frames at 60fps
+                    double frames = kt.TimeSpan.TotalSeconds * 60;
+
+                    string msg = string.Format("{0,8} ms, {1,6} frames, {2}\r\n", 
+                        kt.TimeSpan.TotalMilliseconds.ToString("0.00"), frames.ToString("0.00"), kt.toString());
                     setOutputStatusText(msg);
                 }
             }
